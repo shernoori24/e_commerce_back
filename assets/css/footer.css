@@ -1,0 +1,73 @@
+@import url('common.css');
+
+footer {
+    background-color: var(--nav-color);
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.contact {
+    color: var(--troisieme-color) !important;
+}
+
+.nom {  
+    text-align: center;
+}
+
+.reseaux-sociaux {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.reseaux-sociaux ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.reseaux-sociaux li {
+    margin: 0 10px;
+}
+
+.reseaux-sociaux a {
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+.reseaux-sociaux img {
+    border-radius: 50px;
+    filter: grayscale(100%); 
+    opacity: 0.5; 
+    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+.reseaux-sociaux img:hover {
+    filter: grayscale(0%); 
+    transform: scale(1.1); 
+    opacity: 1; 
+}
+
+/* Media Queries pour le responsive */
+@media (max-width: 768px) {
+    footer {
+        font-size: 0.9rem;
+    }
+    .reseaux-sociaux a {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact {
+        text-align: center;
+    }
+    .reseaux-sociaux ul {
+        flex-direction: row;
+        justify-content: center;
+    }
+}

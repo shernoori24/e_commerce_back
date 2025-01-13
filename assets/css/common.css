@@ -1,0 +1,113 @@
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #00a846;
+  --troisieme-color: #018ead;
+  --nav-color: #00000033;
+  --nav-color-intial: #ff713d;
+  --font-size: 16px;
+  --text-color: #fce6e6;
+}
+
+*,
+*:before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  
+}
+body {
+  padding-top: 100px ;
+  color: var(--text-color);
+  font-size: var(--font-size);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  height: 200vh; /* Ajoute de la hauteur pour permettre le scroll */
+  background-image: url("../img/bg.jpg"); /* Remplacez par le chemin de votre image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  position: relative;
+}
+
+/* Pseudo-élément pour le filtre d'opacité */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black; /* Couleur de l'effet */
+  opacity: 0.6; /* Opacité initiale */
+  z-index: -1; /* Place derrière le contenu */
+  pointer-events: none; /* Empêche toute interaction avec cet élément */
+}
+
+h1 {
+  font-size: 2rem; /* Decrease font size */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center the text */
+  margin-bottom: 20px; /* Add margin below the heading */
+  color: var(--troisieme-color); /* Use your defined color */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 0, 0, 0.3); /* Add a glow effect */
+  letter-spacing: 1px; /* Adjust letter spacing */
+}
+  
+.active-link .active {
+  background-color: var(--nav-color);
+  font-weight: bold;
+  color: var(--troisieme-color);
+  padding: 5px;
+  border-radius: 5px;
+}
+.active-link .active:hover {
+  background-color: var(--troisieme-color);
+  color: var(--nav-color);
+}
+
+
+
+
+.modif-icon, .suprime-icon, .ajouter-icon{
+  display: inline-block; /* Aligns the icons horizontally */
+  margin: 10px; /* Adds space around the icons */
+  transition: transform 0.3s;
+}
+
+.modif-icon img, .suprime-icon img, .ajouter-icon img{
+  width: 30px; /* Set a consistent width for the icons */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.modif-icon:hover, .suprime-icon:hover, .ajouter-icon:hover{
+  transform: scale(1.1);
+  background-color: var(--secondary-color); /* Slightly enlarge the icon on hover */
+  color: var(--nav-color);
+}
+
+.modif-icon {
+  color: #4CAF50; /* Green color for modification icon */
+}
+
+.ajouter-icon, .suprime-icon, .modif-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  background-color: var(--nav-color);
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.suprime-icon {
+  color: #F44336; /* Red color for delete icon */
+}
+
+.modif-icon img:hover, .suprime-icon img:hover ,.ajouter-icon img:hover {
+  filter: brightness(0.8); /* Darken the icon on hover */
+}
