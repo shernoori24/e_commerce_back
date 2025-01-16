@@ -29,7 +29,7 @@
     width: 100%;
     padding: 10px;
     background-color: var(--troisieme-color);
-    color: #fff;
+    /* color: #fff; */
     border: none;
     border-radius: 5px;
     cursor: pointer;

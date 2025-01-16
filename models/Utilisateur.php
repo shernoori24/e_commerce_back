@@ -4,8 +4,8 @@ require_once 'Database.php';
 
 function getByEmail($email) {
     $conn = getConnection();
-    $stmt = $conn->prepare("SELECT * FROM utilisateurs 
-        JOIN roles ON utilisateurs.role_id = roles.id
+    $stmt = $conn->prepare("SELECT * FROM utilisateurs u
+        JOIN roles r ON u.role_id = r.id_role
         WHERE email = ?");
     $stmt->execute([$email]);
     return $stmt->fetch();

@@ -1,4 +1,12 @@
-  <body>
+<?php
+if (isset($_SESSION['user'])){
+  var_dump($_SESSION['user']);
+}
+
+
+
+?>
+<body>
 
     <section class="main-home">
       <div class="main-text">

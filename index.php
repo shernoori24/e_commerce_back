@@ -27,11 +27,8 @@ if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
     }
 
 
-}else if ($maRoute[0] == 'mes-recettes') {
-
-    include 'views/recettes/mes_recettes.php';
-
-
+}else if ($maRoute[0] == 'panier') {
+    include 'views/panier/panier.php';
 
 }else if ($maRoute[0] == 'connexion') {
 
@@ -39,24 +36,17 @@ if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
 
 }
 
-
-
 else if ($maRoute[0] == 'produits') {
-
     include 'controllers/produits.php';
-
-    
-}else if ($maRoute[0] == 'ingredients') {
-
-    include 'controllers/Ingredients.php';
+    include 'models/Produits.php';
 
     
 }else if (isset($_SESSION['user_role']) ) {
-    if ( $_SESSION['user_role'] === 'Administrateur' && $maRoute[0] == 'admin'){
+    if ( $_SESSION['user_role'] === 'Admin' && $maRoute[0] == 'admin'){
         include 'controllers/admin.php';
     }else {
     include 'views/404.php';
     } 
 }
 
-include './includes/footer.html';
+// include './includes/footer.html';

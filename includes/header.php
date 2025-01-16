@@ -27,15 +27,15 @@
     <ul class="nav-links" id="navLinks">
         <li><a href="index" class="active">Accueil</a></li>
         <li><a href="produits">produits</a></li>
-        <li><a href="backOffice/admin.html">admin</a></li>
+        
 
         <?php if (isset($_SESSION['user_id'])): ?> 
             
-            <li><a href="mes-recettes">Mes Recettes</a></li>
+            <li><a href="panier">Mon Panier</a></li>
             
-        <?php if ($_SESSION['user_role'] === 'Administrateur'): ?>
+        <?php if ($_SESSION['user_role'] === 'Admin'): ?>
             
-             <li><a href="admin/recettes">Back Office</a></li>
+            <li><a href="backOffice/admin.html">admin</a></li>
              
         <?php endif; ?>
         
