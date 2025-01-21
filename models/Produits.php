@@ -21,11 +21,27 @@ class Produits {
     }
     return $produits;
 }
+public function getProduit($id) {
+  $conn = getConnection();
+  $query = $this->$conn->prepare('SELECT * FROM produits WHERE id = :id');
+  $query->bindParam(':id', $id);
+  $query->execute();
+  return $query->fetch();
+}
 
   public function getPanier($id_utilisateur) {
     $conn = getConnection();
 
-    $requete = $conn->prepare('SELECT * FROM panier WHERE utilisateur_id = :id_utilisateur');
+    $requete = $conn->prepare('SELECT * FROM panier 
+  
+    JOIN produits on produits.id = panier.produit_id 
+    
+    
+    
+    WHERE utilisateur_id = :id_utilisateur'
+    );
+  
+
     $requete->bindParam(':id_utilisateur', $id_utilisateur);
     $requete->execute();
 
@@ -76,4 +92,91 @@ class Produits {
   
     return $requete->fetch()['nom'];
   }
+
+  public function modifierQuantite($produitId, $utilisateurId, $quantite) {
+    $conn = getConnection();
+    $requete = $conn->prepare('UPDATE panier SET quantite = :quantite WHERE produit_id = :produitId AND utilisateur_id = :utilisateurId');
+    $requete->bindParam(':quantite', $quantite);
+    $requete->bindParam(':produitId', $produitId);
+    $requete->bindParam(':utilisateurId', $utilisateurId);
+    $requete->execute();
+    echo 'modifié';
+}
+public function supprimerProduitDePanier($produitId, $utilisateurId){
+  $conn = getConnection();
+  $requete = $conn->prepare('DELETE FROM panier WHERE produit_id = :produitId AND utilisateur_id = :utilisateurId');
+  $requete->bindParam(':produitId', $produitId);
+  $requete->bindParam(':utilisateurId', $utilisateurId);
+  $requete->execute();
+  echo 'supprimé';
+  }
+
+  public function createCommande($utilisateur_id, $total) {
+    try {
+      $conn = getConnection();
+        $query = $conn->prepare('INSERT INTO commandes (utilisateur_id, date, total) VALUES (:utilisateur_id, NOW(), :total)');
+        $query->bindParam(':utilisateur_id', $utilisateur_id);
+        $query->bindParam(':total', $total);
+        $query->execute();
+        return $conn->lastInsertId();
+    } catch (PDOException $e) {
+        // Gérer l'erreur, par exemple en enregistrant dans un fichier log
+        error_log($e->getMessage());
+        return false;
+    }
+}
+// fuat creer cette funtion
+// createCommandeProduit
+
+public function updateStock($produit_id, $quantite) { 
+     $conn = getConnection();
+
+  $query = $conn->prepare('UPDATE produits SET stock = stock - :quantite WHERE id = :produit_id');
+  $query->bindParam(':quantite', $quantite);
+  $query->bindParam(':produit_id', $produit_id);
+  $query->execute();
+}
+
+
+public function getCommande($commande_id) {
+  $conn = getConnection();
+
+  $query = $conn->prepare('SELECT * FROM commandes WHERE id = :commande_id');
+  $query->bindParam(':commande_id', $commande_id);
+  $query->execute();
+  return $query->fetch();
+}
+
+public function getProduitsCommande($commande_id) {
+  $conn = getConnection();
+
+  $query = $conn->prepare('
+      SELECT p.nom, cp.quantite, p.prix
+      FROM commande_produits cp
+      JOIN produits p ON cp.produit_id = p.id
+      WHERE cp.commande_id = :commande_id
+  ');
+  $query->bindParam(':commande_id', $commande_id);
+  $query->execute();
+  return $query->fetchAll();
+}
+
+public function sendConfirmationEmail($utilisateur_id, $commande_id) {
+  $utilisateur = $this->getUtilisateur($utilisateur_id);
+  $subject = "Confirmation de votre commande #" . $commande_id;
+  $message = "Merci pour votre commande !\n\n";
+  $message .= "Numéro de commande : " . $commande_id . "\n";
+  $message .= "Détails de la commande :\n";
+  // Ajoutez ici les détails des produits commandés
+  mail($utilisateur['email'], $subject, $message);
+}
+
+public function getUtilisateur($utilisateur_id) {
+  $conn = getConnection();
+
+  $query = $conn->prepare('SELECT * FROM utilisateurs WHERE id = :utilisateur_id');
+  $query->bindParam(':utilisateur_id', $utilisateur_id);
+  $query->execute();
+  return $query->fetch();
+}
 }

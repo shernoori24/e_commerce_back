@@ -16,17 +16,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'ajouter-au-panier') {
     if (isset($_GET['id_produit']) && is_numeric($_GET['id_produit'])) {
         $id_produit = (int)$_GET['id_produit'];
         $id_utilisateur = $_SESSION['user_id'];
-
-        // Ajout au panier avec gestion des erreurs
-        if ($produits->ajouterAuPanier($id_produit, $id_utilisateur)) {
-            // Message de succès
-            $_SESSION['message'] = "Le produit a été ajouté au panier avec succès.";
-        } else {
-            // Message d'erreur
-            $_SESSION['message'] = "Erreur lors de l'ajout du produit au panier.";
-        }
-
-        // Redirection vers la même page pour éviter la soumission multiple
+        $produits->ajouterAuPanier($id_produit, $id_utilisateur);
         header("Location: produits");
         exit;
     }
@@ -35,13 +25,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'ajouter-au-panier') {
 
 
 <div class="container mx-auto p-4">
-    <!-- Affichage des messages -->
-    <?php if (isset($_SESSION['message'])): ?>
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-        <?= $_SESSION['message'] ?>
-    </div>
-    <?php unset($_SESSION['message']); ?>
-    <?php endif; ?>
+
 
     <h2 class="text-3xl text-gray-900 capitalize">All <span class="text-red-600">Products</span></h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -6,11 +6,8 @@ if (!isset($_GET['route']) || empty($_GET['route'])) {
 } else {
     $maRoute = explode('/', $_GET['route']);
 }
-
 if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
     include 'views/accueil.php';
-
-
 
 }else if ($maRoute[0] == 'profil') {
 
@@ -26,8 +23,9 @@ if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
         include 'views/404.php';
     }
 
-
 }else if ($maRoute[0] == 'panier') {
+    include 'php/p_panier.php';
+    include 'php/p_commande.php';
     include 'views/panier/panier.php';
 
 }else if ($maRoute[0] == 'connexion') {
@@ -37,10 +35,13 @@ if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
 }
 
 else if ($maRoute[0] == 'produits') {
-    include 'controllers/produits.php';
-    include 'models/Produits.php';
+    if (!isset($maRoute[1]) || ($maRoute[1] == 'toutes' || $maRoute[1] == '')) {
+        include 'views/produits/produits.php';
+    }
+    else {
+        include 'views/404.php';
+    }
 
-    
 }else if (isset($_SESSION['user_role']) ) {
     if ( $_SESSION['user_role'] === 'Admin' && $maRoute[0] == 'admin'){
         include 'controllers/admin.php';
@@ -49,4 +50,4 @@ else if ($maRoute[0] == 'produits') {
     } 
 }
 
-// include './includes/footer.html';
+include './includes/footer.html';

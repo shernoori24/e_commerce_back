@@ -35,7 +35,7 @@
             
         <?php if ($_SESSION['user_role'] === 'Admin'): ?>
             
-            <li><a href="backOffice/admin.html">admin</a></li>
+            <li><a href="backOffice/admin.html">Admin</a></li>
              
         <?php endif; ?>
         

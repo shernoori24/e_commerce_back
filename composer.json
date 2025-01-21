@@ -1,0 +1,15 @@
+{
+    "name": "alaji/e_commerce_back",
+    "autoload": {
+        "psr-4": {
+            "Alaji\\ECommerceBack\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sheraqa Noori",
+            "email": "shernoori24@gmail.com"
+        }
+    ],
+    "require": {}
+}

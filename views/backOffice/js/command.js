@@ -71,3 +71,11 @@ function deletecommande(id) {
 
 // Charge les Commandes quand la page est prête
 loadCommandes();
+
+function ajouterAuPanier(produitId, utilisateurId) {
+    // Envoie une requête AJAX pour ajouter le produit au panier
+    fetch(`ajouter-au-panier.php?produitId=${produitId}&utilisateurId=${utilisateurId}`)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Erreur:', error));
+}
