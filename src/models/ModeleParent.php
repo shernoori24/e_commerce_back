@@ -5,7 +5,7 @@
 
     namespace Models;
 
-    class BD {
+    class ModeleParent {
 
         protected $pdo;
 
@@ -20,7 +20,7 @@
             try {
         
                 // Connexion à la base de données avec PDO
-                $dsn = "mysql:host=$dbhost;port=$dbport;dbname=$dbname;";
+                $dsn = "pgsql:host=$dbhost;port=$dbport;dbname=$dbname;";
                 $this->pdo = new \PDO($dsn, $dbuser, $dbpassword);
         
                 // Configuration des attributs PDO
@@ -34,5 +34,3 @@
         }
 
     }
-
-?>

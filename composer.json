@@ -2,7 +2,10 @@
     "name": "alaji/e_commerce_back",
     "autoload": {
         "psr-4": {
-            "Alaji\\ECommerceBack\\": "src/"
+            "Alaji\\ECommerceBack\\": "src/",
+            "Alaji\\ECommerceBack\\Controller\\": "src/Controller/",
+            "Models\\": "src/Models/",
+            "Controllers\\": "src/Controllers/"
         }
     },
     "authors": [
@@ -12,6 +15,7 @@
         }
     ],
     "require": {
-        "setasign/fpdf": "^1.8"
+        "setasign/fpdf": "^1.8",
+        "vlucas/phpdotenv": "^5.6"
     }
 }

@@ -1,5 +1,5 @@
 <?php
-include './includes/header.php';
+include './src/views/includes/header.php';
 
 
     // On appelle l'autoloader de Composer
@@ -23,49 +23,58 @@ if (!isset($_GET['route']) || empty($_GET['route'])) {
     $maRoute = explode('/', $_GET['route']);
 }
 if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
-    include 'views/accueil.php';
+    include 'src/views/accueil.php';
 
 }else if ($maRoute[0] == 'profil') {
 
     if (!isset($maRoute[1]) ||  $maRoute[1] == '') {
 
-        include 'views/profil/profil.php';
+        include 'src/views/profil/profil.php';
 
     }else if ($maRoute[1] = 'modif_mp'){
         
-        include 'views/profil/modif_mp.php';
+        include 'src/views/profil/modif_mp.php';
     }
     else {
-        include 'views/404.php';
+        include 'src/views/404.php';
     }
 
 }else if ($maRoute[0] == 'panier') {
-    include 'php/p_panier.php';
-    include 'php/p_commande.php';
-    include 'views/panier/panier.php';
+    include 'src/php/p_panier.php';
+    include 'src/php/p_commande.php';
+    include 'src/views/panier/panier.php';
+
+// test
+}else if ($maRoute[0] == 'articles') {
+    // On récupère les données de tous les articles
+    $conseiller_carrefour = new Controllers\ConseillerCarrefour;
+    $codeHTMLdynamique = $conseiller_carrefour->get_all_articles_and_return_html_list();
+
+    // On appelle la vue de la page de tous les articles
+    include("./src/views/tous_les_article.php");
 
 }else if ($maRoute[0] == 'connexion') {
 
-    include 'controllers/Connexion.php';
+    include 'src/controllers/Connexion.php';
 
 }
 
 else if ($maRoute[0] == 'produits') {
     if (!isset($maRoute[1]) || ($maRoute[1] == 'toutes' || $maRoute[1] == '')) {
-        include 'views/produits/produits.php';
+        include 'src/views/produits/produits.php';
     }
     else {
-        include 'views/404.php';
+        include 'src/views/404.php';
     }
 
 }else if (isset($_SESSION['user_role']) ) {
     if ( $_SESSION['user_role'] === 'Admin' && $maRoute[0] == 'admin'){
-        include 'controllers/admin.php';
+        include 'src/controllers/admin.php';
     }else {
-    include 'views/404.php';
+    include 'src/views/404.php';
     } 
 }
 
 
-include './includes/footer.html';
+include './src/views/includes/footer.html';
 

@@ -7,8 +7,8 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <base href="http://localhost/projets/e_commerce_back/">
     <link rel="stylesheet" href="output_style.css">
-    <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="icon" type="image/png" href="./assets/img/logo.png">
+    <link rel="stylesheet" href="./src/assets/css/main.css">
+    <link rel="icon" type="image/png" href="src/assets/img/logo.png">
 
     <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
     <title>E commerce site</title>
@@ -21,7 +21,7 @@
 <!-- navbar  -->
 <nav class="navbar" id="navbar">
     <div class="brand">
-        <a href="index"><img src="assets/img/logo.png" alt="logo" class="logo"></a>
+        <a href="index"><img src="src/assets/img/logo.png" alt="logo" class="logo"></a>
 
         <a href="index">Jonline</a>
     </div>
@@ -36,7 +36,7 @@
             
         <?php if ($_SESSION['user_role'] === 'Admin'): ?>
             
-            <li><a href="backOffice/admin.html">Admin</a></li>
+            <li><a href="src/backOffice/admin.html">Admin</a></li>
              
         <?php endif; ?>
         
@@ -45,11 +45,11 @@
                 <div class="dropdown-content">
                     <a href=""><?php echo $_SESSION['user_nom']; ?></a>
                     <a href="profil">profil</a>
-                    <a href="php/logout.php">Se Déconnecter</a>
+                    <a href="/src/php/logout.php">Se Déconnecter</a>
                 </div>
         </li>
         <?php else: ?>
-            <li><a href="connexion/login">Se Connecter</a></li>
+            <li><a href="src/connexion/login">Se Connecter</a></li>
         <?php endif; ?>
     </ul>
     <!-- Burger menu -->
@@ -64,5 +64,5 @@
 </div>
 <!-- button scroll up -->
 <button id="scrollToTopBtn" class="scroll-to-top">↑</button>
-<script src="assets/js/header.js"></script>
+<script src="src/assets/js/header.js"></script>
 </header>
