@@ -1,3 +1,4 @@
-/vendor/
-/models/dbconfig.php
+# Fichiers ignorés par Git
+
 .env
+./vendor
