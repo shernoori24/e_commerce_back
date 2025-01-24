@@ -1,68 +1,111 @@
-<?php
-require_once 'models/Produits.php';
 
-$produits = new Produits();
-$panier = $produits->getPanier($_SESSION['user_id']);
-
-?>
-
-<div class="container mx-auto p-4">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6">Votre Panier</h2>
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Photo</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Modifier quantité</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix total</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                </tr>
-            </thead>
-                <tbody>
-                    
-                
-                <?php
-                $prix_totol_pour_commander = 0;
-                foreach ($panier as $item): 
-                    $prix_totol_pour_commander += ($item['prix'] * $item['quantite']);
-                    
-                    
-                    ?>
-                <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 text-sm text-gray-900"><img width="30" src="<?= htmlspecialchars($item['photo']) ?>" alt="<?= htmlspecialchars($item['nom']) ?>"></td>
-                    <td class="px-6 py-4 text-sm text-gray-900"><?= htmlspecialchars($item['nom']) ?></td>
-                    <td class="px-6 py-4 text-sm text-gray-900"><?= htmlspecialchars($item['description']) ?></td>
-                    <td class="px-6 py-4 text-sm text-gray-900"><?php echo htmlspecialchars($item['prix']) . '€' ?></td>
-                    <td class="px-6 py-4 text-sm text-gray-900">
-                    <form action="" method="post">
-                        <input type="hidden" name="produit_id" value="<?= $item['produit_id'] ?>">
-                        <input type="hidden" name="utilisateur_id" value="<?= $item['utilisateur_id'] ?>">
-                        <input type="number" name="quantite" min="1" value="<?= $item['quantite'] ?>" class="w-full p-2 pl-10 text-sm text-gray-700 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent">
-                        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Modifier la quantité</button>
-                    </form>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-900"><?php echo htmlspecialchars($item['prix']) * $item['quantite'] . '€' ?></td>
-                    <td class="px-6 py-4 text-sm text-gray-900">
-                    <form action="" method="post">
-                        <input type="hidden" name="supprimer" value="<?= $item['produit_id'] ?>">
-                        <input type="hidden" name="utilisateur_id" value="<?= $item['utilisateur_id'] ?>">
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
-                    </form>
-                </tr>
-                <?php endforeach; 
-                
-                ?>
-            </tbody>
-        </table>
+<body class="bg-gray-100">
+    <div class="container px-4 py-8 mx-auto">
+        <h1 class="mb-8 text-3xl font-bold text-center">Mon Panier</h1>
+        <div id="panier" class="grid grid-cols-1 gap-4">
+            <!-- Les produits du panier seront ajoutés ici dynamiquement -->
+        </div>
+        <div class="mt-8 text-right">
+            <p class="text-xl font-bold">Total : <span id="total">0</span> €</p>
+            <button onclick="passerCommande()" class="px-6 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-600">Passer la commande</button>
+        </div>
     </div>
-</div>
 
+    <script>
+        // Fonction pour afficher les produits du panier
+        function afficherPanier() {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            let panierContainer = document.getElementById('panier');
+            let totalElement = document.getElementById('total');
 
-<h2>Tatale : <?php echo htmlspecialchars($prix_totol_pour_commander) . '€' ?></h2>
+            if (panier.length === 0) {
+                panierContainer.innerHTML = "<p class='text-center'>Votre panier est vide.</p>";
+                totalElement.textContent = "0";
+                return;
+            }
 
-<form action="" method="post">
-  <input class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px -4 rounded" type="submit" name="commander" value="Commander">
-</form>
+            let html = '';
+            let total = 0;
+
+            panier.forEach(produit => {
+                total += produit.prix * produit.quantite;
+                html += `
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <img src="${produit.photo}" alt="${produit.nom}" class="object-cover w-full h-32 mb-4">
+                        <h2 class="text-xl font-semibold">${produit.nom}</h2>
+                        <p class="text-gray-700">Prix unitaire : ${produit.prix} €</p>
+                        <div class="flex items-center mt-2">
+                            <button onclick="modifierQuantite(${produit.id}, -1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-l">-</button>
+                            <span class="px-4">${produit.quantite}</span>
+                            <button onclick="modifierQuantite(${produit.id}, 1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-r">+</button>
+                        </div>
+                        <p class="text-lg font-bold">Total : ${produit.prix * produit.quantite} €</p>
+                        <button onclick="supprimerDuPanier(${produit.id})" class="px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600">Supprimer</button>
+                    </div>
+                `;
+            });
+
+            panierContainer.innerHTML = html;
+            totalElement.textContent = total;
+        }
+
+        // Fonction pour modifier la quantité d'un produit
+        function modifierQuantite(id, delta) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            let produit = panier.find(p => p.id === id);
+
+            if (produit) {
+                produit.quantite += delta;
+                if (produit.quantite <= 0) {
+                    panier = panier.filter(p => p.id !== id); // Supprimer si la quantité est <= 0
+                }
+                localStorage.setItem('panier', JSON.stringify(panier));
+                afficherPanier(); // Rafraîchir l'affichage du panier
+            }
+        }
+
+        // Fonction pour supprimer un produit du panier
+        function supprimerDuPanier(id) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier = panier.filter(p => p.id !== id);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            afficherPanier(); // Rafraîchir l'affichage du panier
+        }
+
+        // Fonction pour passer la commande
+        async function passerCommande() {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+
+            if (panier.length === 0) {
+                alert("Votre panier est vide.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/src/Controller/CommandeController.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(panier)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert("Commande passée avec succès !");
+                    localStorage.removeItem('panier'); // Vider le panier
+                    window.location.href = `/src/Views/facture.php?id=${data.commande_id}`; // Rediriger vers la facture
+                } else {
+                    alert("Erreur lors de la commande : " + data.message);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la requête :", error);
+                alert("Une erreur s'est produite lors de la commande.");
+            }
+        }
+
+        // Afficher le panier au chargement de la page
+        document.addEventListener('DOMContentLoaded', afficherPanier);
+    </script>
+</body>

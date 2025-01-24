@@ -1,6 +1,4 @@
 <?php
-session_start();
-require_once '../models/Utilisateur.php';
 
 $nom = $_POST['nom'] ?? '';
 $email = $_POST['email'] ?? '';
@@ -10,37 +8,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validation des données
     if (empty($nom) || empty($email) || empty($mot_de_passe)) {
         $error = "Tous les champs doivent être remplis.";
-        header("Location: ../connexion/inscription?form=signup&error=" . urlencode($error));
+        $_SESSION['error_inscription'] = $error;
+        header("Location: ../connexion/inscription?form=signup");
         exit;
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "L'email n'est pas valide.";
-        header("Location: ../connexion/inscription?form=signup&error=" . urlencode($error));
+        $_SESSION['error_inscription'] = $error;
+        header("Location: ../connexion/inscription?form=signup");
         exit;
     }
 
+    // Instancier le modèle Utilisateurs
+    $utilisateursModel = new \Models\Utilisateurs();
+
     // Vérifier si l'utilisateur existe déjà
-    if (getByEmail($email)) {
-        $error = "L'email n'est pas encore valide.";
-        header("Location: ../connexion/inscription?form=signup&error=" . urlencode($error));
+    if ($utilisateursModel->getByEmail($email)) {
+        $error = "Un utilisateur avec cet email existe déjà.";
+        $_SESSION['error_inscription'] = $error;
+        header("Location: ../connexion/inscription?form=signup");
         exit;
     }
-    
-    if (create($nom, $email, $mot_de_passe)) {
-        
-        $user = getByEmail($email);
+
+    // Créer un nouvel utilisateur
+    if ($utilisateursModel->create($nom, $email, $mot_de_passe)) {
+        // Récupérer l'utilisateur nouvellement créé
+        $user = $utilisateursModel->getByEmail($email);
+
+        // Stocker les informations de l'utilisateur dans la session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_nom'] = $user['nom'];
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_photo_profil'] = $user['photo'];
 
-
+        // Rediriger vers la page d'accueil
         header("Location: ../");
         exit;
     } else {
         $error = "Une erreur s'est produite lors de l'inscription.";
-        header("Location: ../connexion/inscription?form=signup&error=" . urlencode($error));
+        $_SESSION['error_inscription'] = $error;
+        header("Location: ../connexion/inscription?form=signup");
         exit;
     }
 }

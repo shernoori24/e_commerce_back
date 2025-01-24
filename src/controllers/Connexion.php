@@ -13,21 +13,26 @@
             if (isset($maRoute[1]) || $maRoute == '') {
                 switch ($maRoute[1]) {
                     case '':
-                        include 'views/connexion/login_form.php';
+                        require_once './src/models/Utilisateurs.php'; 
+                        include 'src/php/login.php';
+                        include 'src/views/connexion/login_form.php';
                         break;
                     case 'login':
-                        include 'views/connexion/login_form.php';
+                        require_once './src/models/Utilisateurs.php'; 
+                        include 'src/php/login.php';
+                        include 'src/views/connexion/login_form.php';
                         break;
                     case 'inscription':
-                        
-                        include 'views/connexion/inscription_form.php';
+                        require_once './src/models/Utilisateurs.php'; 
+                        include 'src/php/inscription.php';
+                        include 'src/views/connexion/inscription_form.php';
                         break;
                     default:
-                        include 'views/404.php';
+                        include 'src/views/404.php';
                         break;
                 }
             }else {
-                include 'views/connexion/login_form.php';
+                include 'src/views/connexion/login_form.php';
             }
         }
         ?>

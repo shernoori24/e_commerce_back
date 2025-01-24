@@ -1,25 +1,63 @@
 <?php
+    // router
+    if (!isset($_GET['route']) || empty($_GET['route'])) {
+        $maRoute = [];
+    } else {
+        $maRoute = explode('/', $_GET['route']);
+    }
 
-    // Routeur qui appel tel ou tel fichier pour faire le traitement (récupérer données, afficher données, traiter formulaire, etc)
+    // deriger les itinéraire
+    if (!isset($maRoute[0]) || $maRoute[0] == '' || $maRoute[0] == 'accueil') {
+        include 'src/views/accueil.php';
 
-    // if ( isset($_GET["route"]) && !empty($_GET["route"]) && $_GET["route"] == "accueil" ) {
+    }else if ($maRoute[0] == 'profil') {
 
-    //     include("./src/views/accueil.php");
+        if (!isset($maRoute[1]) ||  $maRoute[1] == '') {
 
-    // } else if ( isset($_GET["route"]) && !empty($_GET["route"]) && $_GET["route"] == "articles") {
+            include 'src/views/profil/profil.php';
 
-    //     // On récupère les données de tous les articles
-    //     $conseiller_carrefour = new Controllers\ConseillerCarrefour;
-    //     $codeHTMLdynamique = $conseiller_carrefour->get_all_articles_and_return_html_list();
+        }else if ($maRoute[1] = 'modif_mp'){
+            
+            include 'src/views/profil/modif_mp.php';
+        }
+        else {
+            include 'src/views/404.php';
+        }
 
-    //     // On appelle la vue de la page de tous les articles
-    //     include("./src/views/page_tous_les_articles.php");
+    }else if ($maRoute[0] == 'panier') {
+        require_once 'src/models/Produits.php';
+        include 'src/views/panier/panier.php';
 
-    // } else {
+    // test
+    }else if ($maRoute[0] == 'connexion') {
 
-    //     include("./src/views/accueil.php");
+        include 'src/controllers/Connexion.php';
 
-    // }
-    
+    }
 
-?>
+    else if ($maRoute[0] == 'produits') {
+        if (!isset($maRoute[1]) || ($maRoute[1] == 'toutes' || $maRoute[1] == '')) {
+            // Afficher tous les produits
+            $produitsController = new Controllers\ProduitsController();
+            $affich_produits = $produitsController->getAllProduits();
+            include 'src/views/produits/produits.php';
+        } else if (is_numeric($maRoute[1])) {
+            // Afficher les détails d'un produit spécifique
+            $id_produit = $maRoute[1];
+            $produitsController = new Controllers\ProduitsController();
+            $produit_trouve = $produitsController->getProduitById($id_produit);
+            if ($produit_trouve) {
+                include 'src/views/produits/detail.php';
+            } else {
+                include 'src/views/404.php';
+            }
+        } else {
+            include 'src/views/404.php';
+        }
+    }else if (isset($_SESSION['user_role']) ) {
+        if ( $_SESSION['user_role'] === 'Admin' && $maRoute[0] == 'admin'){
+            include 'src/controllers/admin.php';
+        }else {
+        include 'src/views/404.php';
+        } 
+    }

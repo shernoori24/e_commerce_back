@@ -5,7 +5,7 @@
 
     namespace Models;
 
-    class ModeleParent {
+    class Bdd {
 
         protected $pdo;
 

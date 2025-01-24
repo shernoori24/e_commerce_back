@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <base href="http://localhost/projets/e_commerce_back/">
-    <link rel="stylesheet" href="output_style.css">
+    <link rel="stylesheet" href="./src/assets/css/output_style.css">
     <link rel="stylesheet" href="./src/assets/css/main.css">
     <link rel="icon" type="image/png" href="src/assets/img/logo.png">
 
     <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
     <title>E commerce site</title>
+    <script src="src/assets/js/panier.js"></script>
 
 </head>
 <body>
@@ -23,7 +24,7 @@
     <div class="brand">
         <a href="index"><img src="src/assets/img/logo.png" alt="logo" class="logo"></a>
 
-        <a href="index">Jonline</a>
+        <a href="index">Jonline Product</a>
     </div>
     <ul class="nav-links" id="navLinks">
         <li><a href="index" class="active">Accueil</a></li>
@@ -45,11 +46,11 @@
                 <div class="dropdown-content">
                     <a href=""><?php echo $_SESSION['user_nom']; ?></a>
                     <a href="profil">profil</a>
-                    <a href="/src/php/logout.php">Se Déconnecter</a>
+                    <a href="src/php/logout.php">Se Déconnecter</a>
                 </div>
         </li>
         <?php else: ?>
-            <li><a href="src/connexion/login">Se Connecter</a></li>
+            <li><a href="connexion/login">Se Connecter</a></li>
         <?php endif; ?>
     </ul>
     <!-- Burger menu -->
