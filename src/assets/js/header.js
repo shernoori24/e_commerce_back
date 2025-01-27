@@ -4,11 +4,10 @@ const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 const burger = document.getElementById('burger');
 const navLinks = document.getElementById('navLinks');
 
-// Hide navbar when scrolling down, show when scrolling up
+// Gestion de la visibilité de la navbar
 window.onscroll = function () {
     let currentScrollPos = window.pageYOffset;
 
-    // Toggle the navbar visibility based on scroll direction
     if (prevScrollPos > currentScrollPos) {
         navbar.style.top = "0";
     } else {
@@ -17,7 +16,7 @@ window.onscroll = function () {
 
     prevScrollPos = currentScrollPos;
 
-    // Show or hide the scroll-to-top button
+    // Affichage du bouton de retour en haut
     if (currentScrollPos > 300) {
         scrollToTopBtn.style.display = "block";
     } else {
@@ -25,7 +24,7 @@ window.onscroll = function () {
     }
 };
 
-// Scroll to the top when the button is clicked
+// Défilement vers le haut
 scrollToTopBtn.onclick = function () {
     window.scrollTo({
         top: 0,
@@ -33,39 +32,16 @@ scrollToTopBtn.onclick = function () {
     });
 };
 
-// Toggle burger menu
+// Gestion du menu burger
 burger.addEventListener('click', function () {
     burger.classList.toggle('active');
     navLinks.classList.toggle('show');
 });
 
+// Gestion de la barre de progression
 window.addEventListener("scroll", function () {
-    // Hauteur totale de la page
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  
-    // Distance défilée
     const scrollTop = document.documentElement.scrollTop;
-  
-    // Pourcentage de défilement
     const scrollPercentage = (scrollTop / scrollHeight) * 100;
-  
-    // Mettre à jour la largeur de la barre de progression
     document.querySelector(".progress").style.width = scrollPercentage + "%";
-  });
-  
-
-
-
-  window.addEventListener('scroll', () => {
-    // Calcul de la position de défilement par rapport à la hauteur totale
-    const scrollTop = window.scrollY; // Pixels défilés
-    const windowHeight = window.innerHeight; // Hauteur de la fenêtre
-    const documentHeight = document.body.scrollHeight; // Hauteur totale du document
-
-    // Calcul du ratio de défilement (entre 0 et 1)
-    const scrollRatio = scrollTop / (documentHeight - windowHeight);
-
-    // Modification dynamique de l'opacité
-    const opacity = 1 - scrollRatio; // Réduit l'opacité au fil du défilement
-    document.body.style.setProperty('--dynamic-opacity', opacity);
 });

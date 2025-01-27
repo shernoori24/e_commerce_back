@@ -26,16 +26,19 @@
 
     }else if ($maRoute[0] == 'panier') {
         require_once 'src/models/Produits.php';
+        include 'src/controllers/CommandeController.php';
         include 'src/views/panier/panier.php';
 
-    // test
+    
+    }else if ($maRoute[0] == 'facture') {
+        require_once  'src/models/FacturePDF.php';
+        include 'src/views/facture.php';
+
     }else if ($maRoute[0] == 'connexion') {
 
         include 'src/controllers/Connexion.php';
 
-    }
-
-    else if ($maRoute[0] == 'produits') {
+    }else if ($maRoute[0] == 'produits') {
         if (!isset($maRoute[1]) || ($maRoute[1] == 'toutes' || $maRoute[1] == '')) {
             // Afficher tous les produits
             $produitsController = new Controllers\ProduitsController();

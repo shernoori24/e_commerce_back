@@ -1,5 +1,5 @@
 <?php
-namespace Alaji\ECommerceBack\Utils;
+namespace Models;
 
 use FPDF;
 
@@ -38,6 +38,6 @@ class FacturePDF extends FPDF {
         }
 
         // Générer le PDF
-        $this->Output('F', __DIR__ . '/../assets/factures/facture_' . $this->commande_id . '.pdf');
+        $this->Output('F', 'src/assets/factures/facture_' . $this->commande_id . '.pdf');
     }
 }

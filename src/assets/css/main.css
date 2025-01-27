@@ -1,13 +1,3 @@
 @import 'common' ;
 @import 'header' ;
 @import 'footer' ;
-@import 'index' ;
-@import 'connexion' ;
-@import 'une-item-detail' ;
-@import 'admin' ;
-@import 'admin-ingredients' ;
-@import 'admin-recettes' ;
-@import 'admin-utilisateurs' ;
-@import 'accueil' ;
-@import 'admin-modif-une-recette' ;
-@import 'admin-une-utilisateur' ;

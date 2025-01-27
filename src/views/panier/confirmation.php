@@ -1,7 +1,5 @@
 <?php
-require_once 'models/Produits.php';
-
-$produits = new Produits();
+$produits = new Models\Produits();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
