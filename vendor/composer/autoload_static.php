@@ -22,6 +22,7 @@ class ComposerStaticInit1629c411343191fb9eefc26d4a7e2059
         'P' => 
         array (
             'PhpOption\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -62,6 +63,10 @@ class ComposerStaticInit1629c411343191fb9eefc26d4a7e2059
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Models\\' => 
         array (
