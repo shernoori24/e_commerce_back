@@ -1,4 +1,5 @@
 # Fichiers ignorés par Git
 
 .env
-./vendor
+vendor/
+src/assets/factures/

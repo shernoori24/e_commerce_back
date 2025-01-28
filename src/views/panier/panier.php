@@ -1,5 +1,3 @@
-
-<body class="bg-gray-100">
     <div class="container px-4 py-8 mx-auto">
         <h1 class="mb-8 text-3xl font-bold text-center">Mon Panier</h1>
         <div id="panier" class="grid grid-cols-1 gap-4">
@@ -8,7 +6,14 @@
         <div class="mt-8 text-right">
             <p class="text-xl font-bold">Total : <span id="total">0</span> €</p>
             <form action="" method="POST" id="form-commande">
-                <!-- Les champs cachés pour les produits du panier seront ajoutés ici dynamiquement -->
+                <div class="mb-4">
+                    <label for="adresse" class="block text-gray-700">Adresse :</label>
+                    <input type="text" name="adresse" id="adresse" required class="w-full p-2 mt-1 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700">E-mail :</label>
+                    <input type="email" name="email" id="email" required class="w-full p-2 mt-1 border rounded">
+                </div>
                 <button type="submit" class="px-6 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-600">Passer la commande</button>
             </form>
         </div>
@@ -17,60 +22,54 @@
     <script>
         // Fonction pour afficher les produits du panier
         function afficherPanier() {
-    let panier = JSON.parse(localStorage.getItem('panier')) || [];
-    let panierContainer = document.getElementById('panier');
-    let totalElement = document.getElementById('total');
-    let formCommande = document.getElementById('form-commande');
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            let panierContainer = document.getElementById('panier');
+            let totalElement = document.getElementById('total');
+            let formCommande = document.getElementById('form-commande');
 
-    // Vider le contenu actuel
-    panierContainer.innerHTML = '';
-    formCommande.innerHTML = '';
+            // Vider le contenu actuel
+            panierContainer.innerHTML = '';
 
-    if (panier.length === 0) {
-        // Si le panier est vide
-        panierContainer.innerHTML = "<p class='text-center'>Votre panier est vide.</p>";
-        totalElement.textContent = "0";
-    } else {
-        // Si le panier n'est pas vide
-        let html = '';
-        let total = 0;
+            if (panier.length === 0) {
+                // Si le panier est vide
+                panierContainer.innerHTML = "<p class='text-center'>Votre panier est vide.</p>";
+                totalElement.textContent = "0";
+            } else {
+                let html = '';
+                let total = 0;
 
-        panier.forEach((produit, index) => {
-            total += produit.prix * produit.quantite;
-            html += `
-                <div class="p-4 bg-white rounded-lg shadow-md">
-                    <img src="${produit.photo}" alt="${produit.nom}" class="object-cover w-full h-32 mb-4">
-                    <h2 class="text-xl font-semibold">${produit.nom}</h2>
-                    <p class="text-gray-700">Prix unitaire : ${produit.prix} €</p>
-                    <div class="flex items-center mt-2">
-                        <button onclick="modifierQuantite(${produit.id}, -1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-l">-</button>
-                        <span class="px-4">${produit.quantite}</span>
-                        <button onclick="modifierQuantite(${produit.id}, 1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-r">+</button>
-                    </div>
-                    <p class="text-lg font-bold">Total : ${produit.prix * produit.quantite} €</p>
-                    <button onclick="supprimerDuPanier(${produit.id})" class="px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600">Supprimer</button>
-                </div>
-            `;
+                panier.forEach((produit, index) => {
+                    total += produit.prix * produit.quantite;
+                    html += `
+                        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md w-72">
+                            <img src="${produit.photo}" alt="${produit.nom}" class="object-cover w-full h-32 mb-4">
+                            <h2 class="text-xl font-semibold">${produit.nom}</h2>
+                            <p class="text-gray-700">Prix unitaire : ${produit.prix} €</p>
+                            <div class="flex items-center mt-2">
+                                <button onclick="modifierQuantite(${produit.id}, -1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-l">-</button>
+                                <span class="px-4">${produit.quantite}</span>
+                                <button onclick="modifierQuantite(${produit.id}, 1)" class="px-2 py-1 text-gray-700 bg-gray-300 rounded-r">+</button>
+                            </div>
+                            <p class="text-lg font-bold">Total : ${produit.prix * produit.quantite} €</p>
+                            <button onclick="supprimerDuPanier(${produit.id})" class="px-4 py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600">Supprimer</button>
+                        </div>
+                    `;
 
-            // Ajouter des champs cachés pour chaque produit
-            formCommande.innerHTML += `
-                <input type="hidden" name="panier[${index}][id]" value="${produit.id}">
-                <input type="hidden" name="panier[${index}][nom]" value="${produit.nom}">
-                <input type="hidden" name="panier[${index}][prix]" value="${produit.prix}">
-                <input type="hidden" name="panier[${index}][quantite]" value="${produit.quantite}">
-                <input type="hidden" name="panier[${index}][photo]" value="${produit.photo}">
-            `;
-        });
+                    // Ajouter des champs cachés pour chaque produit
+                    formCommande.innerHTML += `
+                        <input type="hidden" name="panier[${index}][id]" value="${produit.id}">
+                        <input type="hidden" name="panier[${index}][nom]" value="${produit.nom}">
+                        <input type="hidden" name="panier[${index}][prix]" value="${produit.prix}">
+                        <input type="hidden" name="panier[${index}][quantite]" value="${produit.quantite}">
+                        <input type="hidden" name="panier[${index}][photo]" value="${produit.photo}">
+                    `;
+                });
 
-        panierContainer.innerHTML = html;
-        totalElement.textContent = total;
-    }
+                panierContainer.innerHTML = html;
+                totalElement.textContent = total;
+            }
+        }
 
-    // Ajouter le bouton "Passer la commande" dans tous les cas
-    formCommande.innerHTML += `
-        <button type="submit" class="px-6 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-600">Passer la commande</button>
-    `;
-}
         // Fonction pour modifier la quantité d'un produit
         function modifierQuantite(id, delta) {
             let panier = JSON.parse(localStorage.getItem('panier')) || [];
@@ -97,4 +96,4 @@
         // Afficher le panier au chargement de la page
         document.addEventListener('DOMContentLoaded', afficherPanier);
     </script>
-</body>
+

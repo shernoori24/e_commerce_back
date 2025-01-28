@@ -2,12 +2,13 @@
 namespace Models;
 
 class Commandes extends Bdd {
-    // Créer une nouvelle commande
-    public function createCommande($utilisateur_id, $total) {
-        $stmt = $this->pdo->prepare("INSERT INTO commandes (utilisateur_id, totale) VALUES (?, ?) RETURNING id");
-        $stmt->execute([$utilisateur_id, $total]);
+        // Créer une nouvelle commande
+    public function createCommande($email, $total, $adresse) {
+        $stmt = $this->pdo->prepare("INSERT INTO commandes (email, totale, adresse) VALUES (?, ?, ?) RETURNING id");
+        $stmt->execute([$email, $total, $adresse]);
         return $stmt->fetchColumn();
     }
+    
 
     // Ajouter un produit à la commande
     public function ajouterProduitCommande($commande_id, $produit_id, $quantite, $prix) {

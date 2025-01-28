@@ -1,46 +1,50 @@
-<?php
+<?php 
 namespace Controllers;
 
 use Models\Commandes;
 use Models\FacturePDF;
+use Models\Mail;
 
 class CommandeController {
-    public function passerCommande($panier) {
-        
-
-        // Vérifier si l'utilisateur est connecté
-        if (!isset($_SESSION['user_id'])) {
-            $_SESSION['error'] = "Vous devez être connecté pour passer une commande.";
-            header("Location: panier"); // Rediriger vers la page du panier
-            exit;
-        }
-
-        // Calculer le total de la commande
+    public function passerCommande($panier, $adresse, $email) {
         $total = array_reduce($panier, function($acc, $produit) {
             return $acc + ($produit['prix'] * $produit['quantite']);
         }, 0);
 
-        // Créer la commande
         $commandeModel = new Commandes();
-        $commande_id = $commandeModel->createCommande($_SESSION['user_id'], $total);
+        $commande_id = $commandeModel->createCommande($email, $total, $adresse);
 
-        // Ajouter les produits à la commande
         foreach ($panier as $produit) {
             $commandeModel->ajouterProduitCommande($commande_id, $produit['id'], $produit['quantite'], $produit['prix']);
         }
-        // Générer la facture
-        $facture = new FacturePDF($commande_id);
+
+        $facture = new FacturePDF($commande_id, $email, $adresse);
         $facture->generate();
 
-        // Rediriger vers la page de facture
+        $this->envoyerFactureParEmail($email, $commande_id);
+
         header("Location: facture?id=" . $commande_id);
         exit;
     }
+
+    private function envoyerFactureParEmail($email, $commande_id) {
+        $facturePath = 'src/assets/factures/facture_' . $commande_id . '.pdf';
+        $subject = "Votre facture pour la commande #$commande_id";
+        $message = "Merci pour votre commande. Vous trouverez ci-joint votre facture.";
+
+        $mail = new Mail();
+        $result = $mail->sendMail($email, $subject, $message, $facturePath);
+
+        if ($result !== true) {
+            error_log($result);
+        }
+    }
 }
 
-// Traitement de la requête
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $panier = $_POST['panier'] ?? [];
+    $adresse = $_POST['adresse'] ?? '';
+    $email = $_POST['email'] ?? '';
     $controller = new CommandeController();
-    $controller->passerCommande($panier);
+    $controller->passerCommande($panier, $adresse, $email);
 }

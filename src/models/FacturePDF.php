@@ -5,10 +5,14 @@ use FPDF;
 
 class FacturePDF extends FPDF {
     private $commande_id;
+    private $email;
+    private $adresse;
 
-    public function __construct($commande_id) {
+    public function __construct($commande_id, $email, $adresse) {
         parent::__construct();
         $this->commande_id = $commande_id;
+        $this->email = $email;
+        $this->adresse = $adresse;
     }
 
     public function generate() {
@@ -16,9 +20,17 @@ class FacturePDF extends FPDF {
         $this->SetFont('Arial', 'B', 16);
         $this->Cell(40, 10, 'Facture #' . $this->commande_id);
         $this->Ln(20);
+        $this->SetFont('Arial', '', 12);
+        $this->Cell(40, 10, 'Date : ' . date('d/m/Y H:i:s'));
+        $this->Ln(10);
+        $this->Cell(40, 10, 'Nom de l\'entreprise');
+        $this->Ln(10);
+        $this->Cell(40, 10, 'Adresse : ' . $this->adresse);
+        $this->Ln(10);
+        $this->Cell(40, 10, 'Email : ' . $this->email);
+        $this->Ln(20);
 
         // Ajouter les détails de la commande
-        $this->SetFont('Arial', '', 12);
         $this->Cell(40, 10, 'Produit');
         $this->Cell(40, 10, 'Quantité');
         $this->Cell(40, 10, 'Prix unitaire');
