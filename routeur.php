@@ -30,7 +30,21 @@
         include 'src/views/panier/panier.php';
 
     
-    }else if ($maRoute[0] == 'facture') {
+    }else if ($maRoute[0] == 'payment') {
+        if (!isset($maRoute[1]) ||  $maRoute[1] == '') {
+            
+            include 'src/views/payment/checkout.php';
+        } else if ($maRoute[1] == 'success') {
+            include 'src/views/payment/success.php';
+
+            
+        }else if ($maRoute[1] == 'cancel') {
+            include 'src/views/payment/cancel.php';}
+         else {
+            include 'src/views/404.php';
+        }
+    }
+    else if ($maRoute[0] == 'facture') {
         require_once  'src/models/FacturePDF.php';
         include 'src/views/facture.php';
 
@@ -64,7 +78,8 @@
         }
     }else if (isset($_SESSION['user_role']) ) {
         if ( $_SESSION['user_role'] === 'Admin' && $maRoute[0] == 'admin'){
-            include 'src/controllers/admin.php';
+            // include 'src/controllers/admin.php';
+            include 'src/views/admin/admin.php';
         }else {
         include 'src/views/404.php';
         } 

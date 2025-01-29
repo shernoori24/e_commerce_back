@@ -1,5 +1,5 @@
 async function fetchData() {
-    const response = await fetch('assets/data/data.json'); // Chemin vers ton fichier JSON
+    const response = await fetch('src/assets/data/data.json');
     const data = await response.json();
     return data;
 }

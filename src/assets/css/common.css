@@ -55,7 +55,7 @@ h1 {
   letter-spacing: 1px; /* Adjust letter spacing */
 }
   
-.active-link .active {
+/* .active-link .active {
   background-color: var(--nav-color);
   font-weight: bold;
   color: var(--troisieme-color);
@@ -65,4 +65,4 @@ h1 {
 .active-link .active:hover {
   background-color: var(--troisieme-color);
   color: var(--nav-color);
-}
+} */

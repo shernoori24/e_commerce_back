@@ -3,7 +3,7 @@
 async function loadArticles() {
     try {
         // Récupère les données depuis le fichier JSON
-        const response = await fetch('assets/data/data.json');
+        const response = await fetch('src/assets/data/data.json');
         
         // Vérifie que la réponse est correcte
         if (!response.ok) {

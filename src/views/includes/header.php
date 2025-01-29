@@ -43,7 +43,7 @@
                         </lord-icon>
                     </a></li>
                 <?php if ($_SESSION['user_role'] === 'Admin'): ?>
-                <li><a href="src/backOffice/admin.html">
+                <li><a href="admin">
                         <!-- admin icon  -->
                         <lord-icon src="https://cdn.lordicon.com/xtkytdlz.json" trigger="hover"
                             style="width:50px;height:50px">
