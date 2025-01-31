@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 10px;
   background-color: var(--nav-color);
   transition: top 0.3s ease-in-out;
   z-index: 100;
@@ -44,7 +44,6 @@
   color: white;
   font-size: 16px;
   align-items: center;
-  padding: 10px;
   border-radius: 5px;
   transition: background-color 0.3s;
   margin: 0 15px; /* Espacement entre les éléments */
@@ -59,7 +58,9 @@
     #c850c0 46%,
     #ffcc70 100%
   );
-  -webkit-background-clip: text;
+  -webkit-background-clip: text; /* Pour les navigateurs WebKit */
+  -moz-background-clip: text; /* Pour les navigateurs Mozilla */
+  background-clip: text; /* Pour les navigateurs modernes */
   color: transparent;
 }
 .burger {
@@ -159,6 +160,7 @@
   font-size: 24px;
   cursor: pointer;
   transition: opacity 0.3s ease-in-out;
+  z-index: 1200;
 }
 
 .scroll-to-top:hover {

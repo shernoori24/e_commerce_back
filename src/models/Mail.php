@@ -1,5 +1,4 @@
 <?php
-
 namespace Models;
 
 use PHPMailer\PHPMailer\PHPMailer;

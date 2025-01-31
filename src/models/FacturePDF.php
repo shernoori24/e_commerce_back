@@ -50,7 +50,7 @@ class FacturePDF extends TCPDF {
         // Récupérer les produits de la commande
         $commandeModel = new \Models\Commandes();
         $produits = $commandeModel->getProduitsCommande($this->commande_id);
-
+        
         $this->SetFont('dejavusans', '', 12);
         foreach ($produits as $produit) {
             $this->Cell(40, 10, $produit['nom']);

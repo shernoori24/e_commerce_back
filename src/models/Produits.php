@@ -19,6 +19,43 @@ class Produits extends Bdd {
             return [];
         }
     }
+    public function addProduit($data) {
+        // Validation des données
+        if (empty($data['nom']) || empty($data['prix']) || empty($data['en_stock']) || empty($data['categorie_id']) || empty($data['photo'])) {
+            throw new \InvalidArgumentException("Tous les champs obligatoires doivent être remplis.");
+        }
+    
+        if (!is_numeric($data['prix']) || $data['prix'] <= 0) {
+            throw new \InvalidArgumentException("Le prix doit être un nombre positif.");
+        }
+    
+        if (!is_numeric($data['en_stock']) || $data['en_stock'] < 0) {
+            throw new \InvalidArgumentException("Le stock doit être un nombre positif ou zéro.");
+        }
+    
+        try {
+            // Requête SQL pour insérer un nouveau produit
+            $sql = "INSERT INTO produits (nom, prix, en_stock, description, categorie_id, photo) 
+                    VALUES (:nom, :prix, :en_stock, :description, :categorie_id, :photo)";
+            $stmt = $this->pdo->prepare($sql);
+    
+            // Exécuter la requête avec les données du formulaire
+            $stmt->execute([
+                'nom' => $data['nom'],
+                'prix' => $data['prix'],
+                'en_stock' => $data['en_stock'],
+                'description' => $data['description'],
+                'categorie_id' => $data['categorie_id'],
+                'photo' => $data['photo']
+            ]);
+    
+            return true; // Retourne true si l'insertion réussit
+        } catch (\PDOException $e) {
+            // En cas d'erreur, enregistrer l'erreur dans les logs
+            error_log("Erreur lors de l'ajout du produit : " . $e->getMessage());
+            return false; // Retourne false en cas d'échec
+        }
+    }
 
     // Récupérer un produit par son ID
     public function getProduit($id) {
@@ -32,9 +69,6 @@ class Produits extends Bdd {
             return null;
         }
     }
-
-
-
     // Récupérer le nom d'un produit
     public function getNomProduit($id_produit) {
         try {
@@ -47,116 +81,34 @@ class Produits extends Bdd {
             return null;
         }
     }
-
- 
-
-
-    // Créer une commande
-    public function createCommande($utilisateur_id, $total) {
-        try {
-            $query = $this->pdo->prepare('INSERT INTO commandes (utilisateur_id, date, total) VALUES (:utilisateur_id, NOW(), :total)');
-            $query->bindParam(':utilisateur_id', $utilisateur_id);
-            $query->bindParam(':total', $total);
-            $query->execute();
-            return $this->pdo->lastInsertId();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de la création de la commande : " . $e->getMessage());
-            return false;
-        }
-    }
-
-    // Créer une association entre une commande et un produit
-    public function createCommandeProduit($commande_id, $produit_id, $quantite) {
-        try {
-            $query = $this->pdo->prepare('INSERT INTO commande_produits (commande_id, produit_id, quantite) VALUES (:commande_id, :produit_id, :quantite)');
-            $query->bindParam(':commande_id', $commande_id);
-            $query->bindParam(':produit_id', $produit_id);
-            $query->bindParam(':quantite', $quantite);
-            $query->execute();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de l'ajout du produit à la commande : " . $e->getMessage());
-        }
-    }
-
-    // Mettre à jour le stock d'un produit
-    public function updateStock($produit_id, $quantite) {
-        try {
-            $query = $this->pdo->prepare('UPDATE produits SET stock = stock - :quantite WHERE id = :produit_id');
-            $query->bindParam(':quantite', $quantite);
-            $query->bindParam(':produit_id', $produit_id);
-            $query->execute();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de la mise à jour du stock : " . $e->getMessage());
-        }
-    }
-
-    // Récupérer une commande par son ID
-    public function getCommande($commande_id) {
-        try {
-            $query = $this->pdo->prepare('SELECT * FROM commandes WHERE id = :commande_id');
-            $query->bindParam(':commande_id', $commande_id);
-            $query->execute();
-            return $query->fetch();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de la récupération de la commande : " . $e->getMessage());
-            return null;
-        }
-    }
-
-    // Récupérer les produits d'une commande
-    public function getProduitsCommande($commande_id) {
-        try {
-            $query = $this->pdo->prepare('
-                SELECT p.nom, cp.quantite, p.prix
-                FROM commande_produits cp
-                JOIN produits p ON cp.produit_id = p.id
-                WHERE cp.commande_id = :commande_id
-            ');
-            $query->bindParam(':commande_id', $commande_id);
-            $query->execute();
-            return $query->fetchAll();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de la récupération des produits de la commande : " . $e->getMessage());
-            return [];
-        }
-    }
-
-    // Envoyer un email de confirmation de commande
-    public function sendConfirmationEmail($utilisateur_id, $commande_id) {
-        $utilisateur = $this->getUtilisateur($utilisateur_id);
-        if ($utilisateur) {
-            $subject = "Confirmation de votre commande #" . $commande_id;
-            $message = "Merci pour votre commande !\n\n";
-            $message .= "Numéro de commande : " . $commande_id . "\n";
-            $message .= "Détails de la commande :\n";
-            // Ajoutez ici les détails des produits commandés
-            mail($utilisateur['email'], $subject, $message);
-        }
-    }
-
-    // Récupérer un utilisateur par son ID
-    public function getUtilisateur($utilisateur_id) {
-        try {
-            $query = $this->pdo->prepare('SELECT * FROM utilisateurs WHERE id = :utilisateur_id');
-            $query->bindParam(':utilisateur_id', $utilisateur_id);
-            $query->execute();
-            return $query->fetch();
-        } catch (\PDOException $e) {
-            error_log("Erreur lors de la récupération de l'utilisateur : " . $e->getMessage());
-            return null;
-        }
- 
- 
-    }
-
-
-
-
     public function getNombreEnStock($id){
         $query = $this->pdo->prepare('SELECT en_stock FROM produits WHERE id = :id');
         $query->bindParam(':id', $id);
         $query->execute();
         return $query->fetch();
 
+    }
+    public function getCategories() {
+        try {
+            $sql = "SELECT * FROM categories_produits ORDER BY nom ASC";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            error_log("Erreur lors de la récupération des catégories : " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function addCategorie($nom) {
+        try {
+            $sql = "INSERT INTO categories_produits (nom) VALUES (:nom) RETURNING id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['nom' => $nom]);
+            return $stmt->fetch()['id'];
+        } catch (\PDOException $e) {
+            error_log("Erreur lors de l'ajout de la catégorie : " . $e->getMessage());
+            return null;
+        }
     }
 }

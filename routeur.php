@@ -50,7 +50,6 @@
 
     }
     else if ($maRoute[0] == 'finaliser_commande') {
-        // require_once  'src/models/FacturePDF.php';
         include 'src/views/finaliser_commande.php';
 
     }else if ($maRoute[0] == 'connexion') {
